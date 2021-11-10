@@ -1,0 +1,21 @@
+[build-system]
+requires = [
+    "setuptools >= 45",
+    "wheel >= 0.33",
+    "setuptools_scm[toml] >= 3.5",
+]
+build-backend = 'setuptools.build_meta'
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_first_party = "bloomberg"
+
+[tool.setuptools_scm]
+write_to = "src/bloomberg/datalake/datalakequeryingester/_version.py"
+write_to_template = """
+__version__: str = "{version}"
+"""

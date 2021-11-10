@@ -1,0 +1,24 @@
+version: 1
+disable_existing_loggers: true
+
+root:
+  handlers: [root]
+  level: DEBUG
+
+formatters:
+  default:
+    format: '%(asctime)s %(levelname)-8s %(name)-15s %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+
+filters:
+  healthcheck_filter:
+    "()": bloomberg.datalake.datalakequeryingester.HealthCheckFilter
+
+handlers:
+  root:
+    class: logging.StreamHandler
+    formatter: default
+    level: DEBUG
+    filters:
+      - healthcheck_filter
+    stream: ext://sys.stdout

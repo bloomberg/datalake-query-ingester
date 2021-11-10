@@ -1,0 +1,23 @@
+refroot
+
+# Unit test / coverage reports
+.coverage
+coverage.xml
+unit-test.xml
+integration-test.xml
+system-test.xml
+
+# Byte-compiled / optimized / DLL files
+__pycache__
+*.py[cod]
+*$py.class
+
+# Task logs
+*.log.*
+
+**.egg-info
+
+.tox
+
+.pre-commit
+_version.py
