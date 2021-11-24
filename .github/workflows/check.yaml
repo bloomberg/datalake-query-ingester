@@ -1,0 +1,29 @@
+name: Running checks
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  Run-Tox-with-Docker:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Build Containers
+      run: docker-compose build --no-cache --pull
+
+    - name: Run Test
+      run: docker-compose run --rm test
+
+    - name: Stop Containers
+      if: always()
+      run: docker-compose down
