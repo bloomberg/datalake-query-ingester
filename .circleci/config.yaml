@@ -14,12 +14,18 @@ jobs:
 #      - python/install-packages:
 #          pkg-manager: poetry
       - run:
-          name: run-pytest
+          name: install dependencies
           command: |
             python3 -m venv .venv
             . .venv/bin/activate
-            python setup.py install
-            python -m pytest
+            pip install -e .
+            pip install tox
+      # run tests with tox
+      - run:
+          name: run tox tests
+          command: |
+            . venv/bin/activate
+            tox
   # Release a Docker base image.
   release_images:
     docker:
