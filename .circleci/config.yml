@@ -20,7 +20,6 @@ jobs:
           command: |
             python3 -m venv .venv
             . .venv/bin/activate
-            docker-compose up
             docker-compose run test
   # Release a Docker base image.
   release_images:
