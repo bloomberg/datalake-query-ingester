@@ -1,0 +1,66 @@
+version: 2.1
+orbs:
+  python: circleci/python@1.3.2
+parameters:
+  aws-region:
+    type: string
+    default: "us-west-2"
+jobs:
+  build:
+    docker:
+      - image: cimg/python:3.9.1
+    steps:
+      - checkout
+#      - python/install-packages:
+#          pkg-manager: poetry
+      - run:
+          name: run-pytest
+          command: |
+            python3 -m venv .venv
+            . .venv/bin/activate
+            python setup.py install
+            python -m pytest
+  # Release a Docker base image.
+  release_images:
+    docker:
+      - image: cimg/base:2022.02
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker Image and Push to ECR
+          command: |
+            REGISTRY=711570343235.dkr.ecr.us-west-2.amazonaws.com
+            IMAGE_NAME=datalake-query-ingester
+            if [[ -n "${CIRCLE_TAG}" ]]; then
+              TAG="${CIRCLE_TAG}"
+            else
+              TAG="${CIRCLE_BRANCH}"
+            fi
+            # Build docker image and tag
+            docker build -t "${IMAGE_NAME}:latest" .
+            COMMIT=$(git rev-parse --short HEAD 2>/dev/null)
+            docker tag "${IMAGE_NAME}:latest" "${REGISTRY}/${IMAGE_NAME}:${COMMIT}"
+            docker push "${REGISTRY}/${IMAGE_NAME}:${TAG}"
+            docker push "${REGISTRY}/${IMAGE_NAME}:${COMMIT}"
+workflows:
+  build-release:
+    jobs:
+      - build:
+          context: Build
+          filters:
+            tags:
+              only: /.*/
+
+      - release_images:
+          context: Deploy
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
+                - /feature-.*/
+            tags:
+              only: /.*/
