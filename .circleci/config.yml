@@ -11,16 +11,22 @@ jobs:
       - image: cimg/python:3.9.1
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.6
+          docker_layer_caching: true
 #      - python/install-packages:
 #          pkg-manager: poetry
       - run:
-          name: install dependencies and run tests
+          name: install dependencies
           command: |
             python3 -m venv .venv
             . .venv/bin/activate
             pip install -e .
             pip install tox
             tox
+      - run:
+          name: run tests
+          command: docker-compose run test
   # Release a Docker base image.
   release_images:
     docker:
