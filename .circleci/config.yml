@@ -12,7 +12,6 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.6
           docker_layer_caching: true
 #      - python/install-packages:
 #          pkg-manager: poetry
@@ -21,8 +20,7 @@ jobs:
           command: |
             python3 -m venv .venv
             . .venv/bin/activate
-            pip install -e .
-            pip install tox
+            docker-compose up
             docker-compose run test
   # Release a Docker base image.
   release_images:
