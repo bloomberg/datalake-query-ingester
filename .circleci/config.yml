@@ -23,6 +23,8 @@ jobs:
   release_images:
     docker:
       - image: cimg/base:2022.02
+    environment:
+      AWS_REGION: "<< pipeline.parameters.aws-region >>"
     steps:
       - checkout
       - setup_remote_docker:
