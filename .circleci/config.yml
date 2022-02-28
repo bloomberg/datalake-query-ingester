@@ -26,6 +26,8 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
+      - aws-ecr/ecr-login:
+          account-url: PROD_ECR_ACCOUNT_URL
       - run:
           name: Build Docker Image and Push to ECR
           command: |
