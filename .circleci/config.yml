@@ -22,6 +22,7 @@ jobs:
             . .venv/bin/activate
             pip install -e . --index-url https://pypi.org/simple/
             pip install tox --index-url https://pypi.org/simple/
+            docker-compose up datalakequeryingester
             docker-compose run test
   # Release a Docker base image.
   release_images:
