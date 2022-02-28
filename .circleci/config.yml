@@ -39,6 +39,7 @@ jobs:
             # Build docker image and tag
             docker build -t "${IMAGE_NAME}:latest" .
             COMMIT=$(git rev-parse --short HEAD 2>/dev/null)
+            docker tag "${IMAGE_NAME}:latest" "${REGISTRY}/${IMAGE_NAME}:${TAG}"
             docker tag "${IMAGE_NAME}:latest" "${REGISTRY}/${IMAGE_NAME}:${COMMIT}"
             docker push "${REGISTRY}/${IMAGE_NAME}:${TAG}"
             docker push "${REGISTRY}/${IMAGE_NAME}:${COMMIT}"
