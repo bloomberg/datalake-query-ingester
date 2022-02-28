@@ -2,10 +2,6 @@ version: 2.1
 orbs:
   python: circleci/python@1.3.2
   aws-ecr: circleci/aws-ecr@6.15.3
-parameters:
-  aws-region:
-    type: string
-    default: "us-west-2"
 jobs:
   build:
     docker:
@@ -24,13 +20,13 @@ jobs:
     docker:
       - image: cimg/base:2022.02
     environment:
-      AWS_REGION: "<< pipeline.parameters.aws-region >>"
+      AWS_REGION: us-west-2
+      AWS_ECR_ACCOUNT_URL: 711570343235.dkr.ecr.us-west-2.amazonaws.com
     steps:
       - checkout
+      - aws-ecr/ecr-login
       - setup_remote_docker:
           docker_layer_caching: true
-      - aws-ecr/ecr-login:
-          account-url: PROD_ECR_ACCOUNT_URL
       - run:
           name: Build Docker Image and Push to ECR
           command: |
