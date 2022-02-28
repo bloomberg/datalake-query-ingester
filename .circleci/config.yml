@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   python: circleci/python@1.3.2
+  aws-ecr: circleci/aws-ecr@6.15.3
 parameters:
   aws-region:
     type: string
